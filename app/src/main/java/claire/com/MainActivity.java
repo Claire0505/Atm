@@ -1,5 +1,6 @@
 package claire.com;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -13,6 +14,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (!logon) //如果末登入，則開啟LoginActivity
         {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
 
         }
     }
