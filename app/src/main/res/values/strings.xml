@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Atm</string>
+    <string name="txt_userid">userid</string>
+    <string name="input_userid">please input your userid</string>
+    <string name="txt_password">password</string>
+    <string name="input_password">please input your password</string>
+    <string name="txt_login">login</string>
+    <string name="txt_cancel">cancel</string>
+</resources>

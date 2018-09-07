@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Atm</string>
+    <string name="txt_userid">帳號</string>
+    <string name="input_userid">請輸入你的帳號</string>
+    <string name="txt_password">密碼</string>
+    <string name="input_password">請輸入密碼</string>
+    <string name="txt_login">登入</string>
+    <string name="txt_cancel">取消</string>
+</resources>
