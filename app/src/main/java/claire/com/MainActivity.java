@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // 測試TestActivity
-        startActivity(new Intent(this, TestActivity.class));
+        // startActivity(new Intent(this, TestActivity.class));
 
         if (!logon) //如果末登入，則開啟LoginActivity
         {
