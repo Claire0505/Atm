@@ -7,4 +7,6 @@
     <string name="input_password">請輸入密碼</string>
     <string name="txt_login">登入</string>
     <string name="txt_cancel">取消</string>
+    <string name="setting">設定</string>
+    <string name="help">HELP</string>
 </resources>

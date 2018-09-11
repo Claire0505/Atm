@@ -4,7 +4,9 @@
     <string name="input_userid">please input your userid</string>
     <string name="txt_password">password</string>
     <string name="input_password">please input your password</string>
-    <string name="txt_login">login</string>
-    <string name="txt_cancel">cancel</string>
+    <string name="txt_login">Login</string>
+    <string name="txt_cancel">Cancel</string>
     <string name="title_activity_test">TestActivity</string>
+    <string name="setting">setting</string>
+    <string name="help">HELP</string>
 </resources>
