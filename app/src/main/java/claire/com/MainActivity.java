@@ -9,11 +9,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     public static final int RC_LOGIN = 1;
     boolean logon = false;
     String[] func = {"餘額查詢","交易明細", "最新消息", "投資理財", "離開"};
@@ -22,6 +23,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //使用GridView
+        GridView grid = findViewById(R.id.grid);
+        ArrayAdapter gAdapter =
+                new ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1, func);
+        grid.setAdapter(gAdapter);
+        //讓MainActivity實作implements傾聽者並實作OnItemClick()方法
+        grid.setOnItemClickListener(this);
+
         //清單 ListView
         ListView list = findViewById(R.id.list);
         ArrayAdapter adapter = new ArrayAdapter(this,
@@ -106,5 +116,24 @@ public class MainActivity extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        switch (position){
+            case 0:
+                Toast.makeText(this, "" + position, Toast.LENGTH_SHORT).show();
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                finish(); //離開
+                break;
+        }
+
     }
 }
