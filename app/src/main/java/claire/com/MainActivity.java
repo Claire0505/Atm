@@ -7,28 +7,73 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     public static final int RC_LOGIN = 1;
     boolean logon = false;
     String[] func = {"餘額查詢","交易明細", "最新消息", "投資理財", "離開"};
+    int[] icons = {R.drawable.func_balance,
+                    R.drawable.func_history,
+                    R.drawable.func_news,
+                    R.drawable.func_finance,
+                    R.drawable.func_exit};
+
+    //客制化GridView
+    class IconAdapter extends BaseAdapter{
+
+        @Override
+        public int getCount() { //回傳項目個數
+            return func.length;
+        }
+
+        @Override
+        public Object getItem(int position) { //應回傳參數所對應的資源，可使用功能項目的字串，回傳給呼叫方
+            return func[position];
+        }
+
+        @Override
+        public long getItemId(int position) { //應回傳position所對應的id值，這個值應為可供辨識，不重複
+            return icons[position];
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            //在畫面上欲展示一個項目給使用者時會呼叫此方法
+            //傳入參數 convertView 即是目前呼叫方法手上有的View元件，第一次呼叫時是null值
+            View row = convertView;
+            if (row == null){
+                row = getLayoutInflater().inflate(R.layout.item_row, null);
+                ImageView image = row.findViewById(R.id.item_image);
+                TextView text = row.findViewById(R.id.item_text);
+                image.setImageResource(icons[position]);
+                text.setText(func[position]);
+            }
+
+            return row;
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //使用GridView
+        //客製化GridView
         GridView grid = findViewById(R.id.grid);
-        ArrayAdapter gAdapter =
-                new ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1, func);
+        IconAdapter gAdapter = new IconAdapter();
         grid.setAdapter(gAdapter);
+
         //讓MainActivity實作implements傾聽者並實作OnItemClick()方法
         grid.setOnItemClickListener(this);
 
@@ -120,17 +165,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        switch (position){
-            case 0:
+
+        switch ((int)id){
+            case R.drawable.func_balance:
                 Toast.makeText(this, "" + position, Toast.LENGTH_SHORT).show();
                 break;
-            case 1:
+            case R.drawable.func_history:
                 break;
-            case 2:
+            case R.drawable.func_news:
                 break;
-            case 3:
+            case R.drawable.func_finance:
                 break;
-            case 4:
+            case R.drawable.func_exit:
                 finish(); //離開
                 break;
         }
