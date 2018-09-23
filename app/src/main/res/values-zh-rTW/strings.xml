@@ -9,4 +9,8 @@
     <string name="txt_cancel">取消</string>
     <string name="setting">設定</string>
     <string name="help">HELP</string>
+    <string name="date">日期</string>
+    <string name="info">說明</string>
+    <string name="amount">金額</string>
+    <string name="add">新增</string>
 </resources>
