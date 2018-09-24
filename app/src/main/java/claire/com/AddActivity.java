@@ -1,6 +1,8 @@
 package claire.com;
 
 import android.content.ContentValues;
+import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,7 +12,7 @@ import android.widget.EditText;
 public class AddActivity extends AppCompatActivity {
 
     private EditText edDate, edInfo, edAmount;
-    private MyDBHelper dbHelper;
+    private  MyDBHelper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +26,7 @@ public class AddActivity extends AppCompatActivity {
          * CursorFactory factory: 在此使用null，代表以標準模示SQLiteCursor處理Cursor
          * int version: 應用程式目前資料庫版本 1
          */
-        dbHelper = new MyDBHelper(this,"expense.db",null,1);
+         helper = MyDBHelper.getInstance(this);
     }
 
     private void initView() {
@@ -49,10 +51,11 @@ public class AddActivity extends AppCompatActivity {
         // 3.取得資料庫物件後呼叫insert方法，傳入表格名稱與values集合物件以新增這筆記錄
         // 若成功會回傳新增記錄的id值
         // insert方法中第二個參數可填入一個欄位名稱，當第三個參數(values資料包)無任何資料時，會在該欄位上給予空值
-        long id = dbHelper.getWritableDatabase()
+        long id = helper.getWritableDatabase()
                 .insert("exp", null, values);
         // 使用Log印出除錯訊息
         Log.d("ADD",id + "");
 
+        startActivity(new Intent(this, FinanceActivity.class));
     }
 }

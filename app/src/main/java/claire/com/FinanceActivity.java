@@ -17,6 +17,21 @@ public class FinanceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_finance);
+
+        ListView list = findViewById(R.id.list);
+        MyDBHelper dbHelper = MyDBHelper.getInstance(this);
+        Cursor c = dbHelper.getReadableDatabase().query(
+                "exp", null, null,null, null, null, null);
+
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
+                R.layout.finance_row,  //使用自行設定的layout
+                c,  //傳入所查詢的Cursor物件
+                new String[]{"cdate","info","amount"}, //改顯示三個[cdate][info][amount]兩個欄位
+                new int[] {R.id.item_cdate, R.id.item_info, R.id.item_amount}, //自訂layout的id
+                0); //flags如果給「0」代表ListView在展示過程中資料庫中的記錄如果更動了，
+        // ListView將不自動重新查詢並更動畫面中的資料。
+        list.setAdapter(adapter);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -28,19 +43,7 @@ public class FinanceActivity extends AppCompatActivity {
             }
         });
 
-        ListView list = findViewById(R.id.list);
-        MyDBHelper dbHelper = new MyDBHelper(this, "expense.db", null, 1);
-        Cursor c = dbHelper.getReadableDatabase().query(
-                "exp", null, null,null, null, null, null);
 
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
-                android.R.layout.simple_expandable_list_item_2,  //傳入版面資源代表一列資料中顯示兩個TextView
-                c,  //傳入所查詢的Cursor物件
-                new String[]{"info","amount"}, //顯示[info][amount]兩個欄位
-                new int[] {android.R.id.text1, android.R.id.text2}, //兩個欄位所對應版面中的id值與flags參數
-                0); //flags如果給「0」代表ListView在展示過程中資料庫中的記錄如果更動了，
-                         // ListView將不自動重新查詢並更動畫面中的資料。
-        list.setAdapter(adapter);
     }
 
 }
