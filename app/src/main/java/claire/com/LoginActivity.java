@@ -1,12 +1,19 @@
 package claire.com;
 
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -29,7 +36,16 @@ public class LoginActivity extends AppCompatActivity {
         String uid = edUserid.getText().toString();
         String pw = edPassword.getText().toString();
         //測式帳密 jack/1234
-        if (uid.equals("jack") && pw.equals("1234")){
+        String url = new StringBuilder(
+                "http://atm201605.appspot.com/login?uid=")
+                .append(uid)
+                .append("&pw=")
+                .append(pw)
+                .toString();
+
+        new LoginTask().execute(url);
+
+      /*  if (uid.equals("jack") && pw.equals("1234")){
 
             // 使用SharedPreference記住登入帳號
             // 呼叫getSharedPreferences()方法，產生一個檔名為atm.xml的設定儲存檔
@@ -56,11 +72,59 @@ public class LoginActivity extends AppCompatActivity {
                     .setMessage("登入失敗")
                     .setPositiveButton("Ok", null)
                     .show();
-        }
+        }*/
 
     }
 
     public void cancel(View v){
 
+    }
+
+    //設計網路連線登入的AsyncTask內部類別<傳入值型態，更新進度型態，結果型態(回傳值)>
+    class LoginTask extends AsyncTask<String, Void, Boolean>{
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+            boolean logon = false;
+            try {
+                //產生java.net.URL物件，並連線讀取一個字元，
+                //因讀取到[1]字元時，其 Unicode值為49，代表登成功
+                //若不是[1]則代表登入失敗
+                URL url = new URL(strings[0]);
+                InputStream is = url.openStream();
+                int data = is.read();
+                Log.d("HTTP", String.valueOf(data));
+                if (data == 49){
+                    logon = true;
+                }
+                is.close();
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return logon;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+
+            if (aBoolean){
+                //儲存帳號至SharedPreference
+                //結束本畫面，回到MainActivity
+                Toast.makeText(LoginActivity.this, "登入成功", Toast.LENGTH_SHORT).show();
+                setResult(RESULT_OK, getIntent());
+                finish();
+            } else { //登入失敗
+                new AlertDialog.Builder(LoginActivity.this)
+                        .setTitle("Atm")
+                        .setMessage("登入失敗")
+                        .setPositiveButton("OK", null)
+                        .show();
+
+            }
+        }
     }
 }
