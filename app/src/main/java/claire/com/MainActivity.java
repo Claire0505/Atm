@@ -171,6 +171,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 Toast.makeText(this, "" + position, Toast.LENGTH_SHORT).show();
                 break;
             case R.drawable.func_history:
+                startActivity(new Intent(this, TransActivity.class));
                 break;
             case R.drawable.func_news:
                 break;

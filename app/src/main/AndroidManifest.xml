@@ -2,17 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="claire.com">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
-    <!--新版的Android系統自動限制了以明碼(無加密)的HTTP連線，在此先將限制放寬-->
+    <!-- 新版的Android系統自動限制了以明碼(無加密)的HTTP連線，在此先將限制放寬 -->
     <application
-        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,7 +29,8 @@
             android:name=".FinanceActivity"
             android:label="@string/title_activity_finance"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".AddActivity"/>
+        <activity android:name=".AddActivity" />
+        <activity android:name=".TransActivity"></activity>
     </application>
 
 </manifest>
