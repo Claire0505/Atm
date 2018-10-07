@@ -5,11 +5,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -88,6 +93,36 @@ public class TransActivity extends AppCompatActivity {
         }
     }
 
+    //使用Android中已內建的 JSON.org解析，JSONObject類別可解析JSON物件, 而JSONArray類別可用在JSON陣列
+    //JSON陣列-用來表示多筆資料，含有一筆以上的資料，資料間用逗號分隔[物件1,物件2,物件3]
+    //JSON物件-用來表示(一筆)資料，資料中每個欄位名稱以冒號表示它的值，並以大括號集合所有欄位成為一個物件
+    // {欄位名稱:欄位值,欄位名稱:欄位值,欄位名稱:欄位值}
     private void parseJSON(String s) {
+        //實作解析JSON資料並將資料收集在Java的ArrayList類別中
+        //先準備ArrayList集合物件trans，裡面只能存放Transaction物件
+        ArrayList<Transaction> trans = new ArrayList<>();
+        try {
+            //將傳入的字串s交給JSONArray的建構子，產生array物件
+            JSONArray array = new JSONArray(s);
+            //以迴圈依序取出交易記錄
+            for (int i = 0; i < array.length(); i++){
+                //以索引值取得JSONObject物件obj
+                JSONObject obj = array.getJSONObject(i);
+                //呼叫JSONObject類的getXX方法取得各個屬性值
+                String account = obj.getString("account");
+                String date = obj.getString("date");
+                int amount = obj.getInt("amount");
+                int type = obj.getInt("type");
+
+                Log.d("JSON: ", account + "/" + date + "/" + amount + "/" + type);
+                //產生Transaction物件，代表一筆交易記錄
+                Transaction t = new Transaction(account, date, amount, type);
+                //將物件加入到集合中
+                trans.add(t);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
