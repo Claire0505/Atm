@@ -5,6 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,7 +54,8 @@ public class TransActivity extends AppCompatActivity {
                 String json = response.body().string();
                 Log.d("OKHTTP", json);
                 //解析JSON
-                parseJSON(json);
+                //parseJSON(json);
+                parseGson(json);
 
             }
         });
@@ -124,5 +128,20 @@ public class TransActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    //使用Gson第三方函式庫，由Google所提供處理JSON格式的函式庫，比JSON.org更有效率
+    private void parseGson(String s){
+        //產生Gson物件
+        Gson gson = new Gson();
+        //呼叫Gson類別的「fromJson」方法，代表要從JSON格式資料轉換為Java資料
+        //第一個參數s 是JSON字串，第二個參數則是提供給Gson類別我們想要轉出的資料格式，
+        //資料型態使用Gson類別會試著將JSON資料一次就轉換為Java的集合類別，最後以list物件儲存
+        ArrayList<Transaction> list =
+                gson.fromJson(s,
+                        new TypeToken<ArrayList<Transaction>>(){}.getType());
+        Log.d("GSON ", list.size() + "/" + list.get(0).getAmount());
+
+        
     }
 }
