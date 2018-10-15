@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -18,6 +20,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -55,7 +58,9 @@ public class TransActivity extends AppCompatActivity {
                 Log.d("OKHTTP", json);
                 //解析JSON
                 //parseJSON(json);
-                parseGson(json);
+                //parseGson(json);
+                // TODO: 2018/10/15 使用Jackson搭配會有問題，資料解析不出來待查詢 
+                parseJackson(json);
 
             }
         });
@@ -142,6 +147,23 @@ public class TransActivity extends AppCompatActivity {
                         new TypeToken<ArrayList<Transaction>>(){}.getType());
         Log.d("GSON ", list.size() + "/" + list.get(0).getAmount());
 
-        
+    }
+
+    //使用Jackson第三方函式庫
+    private void parseJackson(String s){
+        //產生Jackson函式庫負責解析 ObjectMapper 類別
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        //呼叫ObjectMapper的readValue方法進行JSON格式轉換為Java資料的工作，第一個參數為JSON字串s
+        //使用Jackson的TypeReference宣告目的型態為ArrayList<Transaction>,
+        // ObjectMapper會試著將JSON資料一次就轉換為Java的集合類別，最後以list物件儲存
+        try {
+            ArrayList<Transaction> list =
+                    objectMapper.readValue(s,
+                            new TypeReference<List<Transaction>>(){});
+            Log.d("JACKSON",list.size()+"/"+list.get(0).getAmount());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
