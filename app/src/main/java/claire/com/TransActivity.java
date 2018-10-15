@@ -3,6 +3,8 @@ package claire.com;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -58,14 +60,21 @@ public class TransActivity extends AppCompatActivity {
                 Log.d("OKHTTP", json);
                 //解析JSON
                 //parseJSON(json);
-                //parseGson(json);
+                parseGson(json);
                 // TODO: 2018/10/15 使用Jackson搭配會有問題，資料解析不出來待查詢 
-                parseJackson(json);
+               // parseJackson(json);
 
             }
         });
 
         //new TransTask().execute("http://atm201605.appspot.com/h");
+    }
+
+    private void setRecyclerView(List<Transaction> list){
+        RecyclerView recyclerView = findViewById(R.id.recycler);
+        TransactionAdapter adapter = new TransactionAdapter(list);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     //使用[AsyncTask]類別設計HTTP連線工作
@@ -142,10 +151,16 @@ public class TransActivity extends AppCompatActivity {
         //呼叫Gson類別的「fromJson」方法，代表要從JSON格式資料轉換為Java資料
         //第一個參數s 是JSON字串，第二個參數則是提供給Gson類別我們想要轉出的資料格式，
         //資料型態使用Gson類別會試著將JSON資料一次就轉換為Java的集合類別，最後以list物件儲存
-        ArrayList<Transaction> list =
+        final ArrayList<Transaction> list =
                 gson.fromJson(s,
                         new TypeToken<ArrayList<Transaction>>(){}.getType());
         Log.d("GSON ", list.size() + "/" + list.get(0).getAmount());
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                setRecyclerView(list);
+            }
+        });
 
     }
 
