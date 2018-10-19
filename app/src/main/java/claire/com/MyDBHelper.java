@@ -1,5 +1,6 @@
 package claire.com;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -31,6 +32,17 @@ public class MyDBHelper extends SQLiteOpenHelper {
                     "cdate DATETIME NOT NULL," +
                     "info VARCHAR, " +
                     "amount INTEGER)");
+
+        db.execSQL("CREATE TABLE infos " +
+                "(_id INTEGER PRIMARY KEY  NOT NULL , " +
+                "info VARCHAR NOT NULL)" );
+
+        String[] infos = {"Breakfast", "Bread", "Lunch", "Parking", "Bill"};
+        for (String info : infos) {
+            ContentValues values = new ContentValues();
+            values.put("info", info);
+            db.insert("infos", null, values);
+        }
 
     }
 

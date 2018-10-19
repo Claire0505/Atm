@@ -2,6 +2,7 @@ package claire.com;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.SimpleCursorAdapter;
 
 public class AddActivity extends AppCompatActivity {
 
@@ -25,7 +27,7 @@ public class AddActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add);
 
         initView();
-        setupAdapter();
+       // setupAdapter();
 
         /**
          * Context context: this,即傳入activity本身
@@ -34,6 +36,40 @@ public class AddActivity extends AppCompatActivity {
          * int version: 應用程式目前資料庫版本 1
          */
          helper = MyDBHelper.getInstance(this);
+         setupAdapterSQLiteTABLE();
+    }
+
+    //AutoCompleteTextView-SQLite表格
+    private void setupAdapterSQLiteTABLE() {
+        Cursor cursor = helper.getReadableDatabase()
+                .query("infos", null, null, null, null, null, null);
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(
+                this,
+                android.R.layout.simple_list_item_1,
+                cursor,
+                new String[]{"info"},
+                new int[]{android.R.id.text1}, 0);
+
+        //修正使用AutoCompleteTextView 從SQLite取出資料時，顯示（'android.database.sqlite.SQLiteCursor @'...）
+        //adapter使用CursorToStringConverter將文字轉換後再將autoInfo.setAdapter(adapter)
+        SimpleCursorAdapter.CursorToStringConverter converter =
+                new SimpleCursorAdapter.CursorToStringConverter(){
+
+                    @Override
+                    public CharSequence convertToString(Cursor cursor) {
+                        int infoColumn = 1;
+                        return cursor.getString(infoColumn);
+                    }
+                };
+        adapter.setCursorToStringConverter(converter);
+
+        autoInfo.setAdapter(adapter);
+        autoInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                autoInfo.showDropDown();
+            }
+        });
     }
 
     private void setupAdapter() {
