@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
@@ -15,6 +17,7 @@ public class AddActivity extends AppCompatActivity {
     private EditText edDate, edInfo, edAmount;
     private  MyDBHelper helper;
     private DatePicker datePicker;
+    private AutoCompleteTextView autoInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +25,8 @@ public class AddActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add);
 
         initView();
+        setupAdapter();
+
         /**
          * Context context: this,即傳入activity本身
          * String name: 為資料庫檔案名稱 expense.db
@@ -31,11 +36,26 @@ public class AddActivity extends AppCompatActivity {
          helper = MyDBHelper.getInstance(this);
     }
 
+    private void setupAdapter() {
+        String[] infos = {"Breakfast", "Bread", "Lunch","Parking", "Bill", "Dinner", "Drink"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1,
+                infos);
+        autoInfo.setAdapter(adapter);
+        autoInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                autoInfo.showDropDown();
+            }
+        });
+    }
+
     private void initView() {
         //edDate = findViewById(R.id.ed_date);
-        edInfo = findViewById(R.id.ed_info);
+        //edInfo = findViewById(R.id.ed_info);
         edAmount = findViewById(R.id.ed_amount);
         datePicker = findViewById(R.id.datePicker);
+        autoInfo = findViewById(R.id.autoCompleteTextView);
     }
 
     public void add (View view){
@@ -46,7 +66,7 @@ public class AddActivity extends AppCompatActivity {
         int month = datePicker.getMonth()+1;
         int day = datePicker.getDayOfMonth();
         String cdate = year + "-" + month + "-" + day;
-        String info = edInfo.getText().toString();
+        String info = autoInfo.getText().toString();
         int amount = Integer.parseInt(edAmount.getText().toString());
 
         // 2.收集一筆記錄資料
