@@ -7,12 +7,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 
 public class AddActivity extends AppCompatActivity {
 
     private EditText edDate, edInfo, edAmount;
     private  MyDBHelper helper;
+    private DatePicker datePicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,14 +32,20 @@ public class AddActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        edDate = findViewById(R.id.ed_date);
+        //edDate = findViewById(R.id.ed_date);
         edInfo = findViewById(R.id.ed_info);
         edAmount = findViewById(R.id.ed_amount);
+        datePicker = findViewById(R.id.datePicker);
     }
 
     public void add (View view){
         // 1.取得畫面上使用者輸入的資料
-        String cdate = edDate.getText().toString();
+        //String cdate = edDate.getText().toString();
+        //取得DatePicker並轉換字串
+        int year = datePicker.getYear();
+        int month = datePicker.getMonth()+1;
+        int day = datePicker.getDayOfMonth();
+        String cdate = year + "-" + month + "-" + day;
         String info = edInfo.getText().toString();
         int amount = Integer.parseInt(edAmount.getText().toString());
 
